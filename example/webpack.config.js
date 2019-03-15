@@ -1,6 +1,7 @@
 const getPagePlugins = require('./webpack.page.definition');
 const entry = require('webpack-glob-entry');
 const path = require('path');
+const HtmlWebpackExternalsPlugin = require('html-webpack-externals-plugin')
 
 const entryPoints = entry(filePath => filePath.split('/').slice(2).join('/').split('.')[0], './src/**/index.js', './src/**/index.ts');
 module.exports = {
@@ -19,6 +20,14 @@ module.exports = {
     ]
   },
   plugins: [
-    ...getPagePlugins('./src/**/index.html')
+    ...getPagePlugins('./src/**/index.html'),
+    new HtmlWebpackExternalsPlugin({
+      externals: [
+        {
+          module: 'webcomponents-loader',
+          entry: 'https://unpkg.com/@webcomponents/webcomponentsjs/webcomponents-loader.js'
+        }
+      ]
+    })
   ]
 }
